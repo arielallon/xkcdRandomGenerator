@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <title>XKCD Random Number Generator - wha?</title>
+        <style type="text/css">
+            body {
+                font-family: "Helvetica", "Arial", sans-serif;
+            }
+            #content {
+                width: 600px;
+                /*margin: 0 auto;*/
+            }
+            #number {
+                font-weight: bold;
+                font-size: 200px;
+            }
+            #errors {
+                width: 500px;
+                background-color: #CC3333;
+                padding: 10px 10px 10px 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <h1>wha?</h1>
+            <h2>Come on Ariel, how is this at all related to xkcd?</h2>
+            <p>I'm glad you asked, [insert name here].</p>
+            <p>It's pretty simple really. If you click on xkcd's "Random" button, it will redirect you to a "random" comic.</p>
+            <p>If you just reload the <a href="xkcdrand.php">XKCD Random Number Generator</a> or hit "Go" without entering a maximum and minimum value, you'll get the number of the comic which XKCD randomly decided to give you that time.</p>
+            <p>If you provide a minimum and maximum value, we'll use XKCD's random number to give you a corresponding number in your range.</p>
+            <ul>
+                <li>So let's say I want to flip a two sided coin but I want XKCD's random number generator to be the arbiter of whether I landed on heads or tails. I just put 1 for minimum, 2 for maximum, check the "Integers Only" box, and hit <a href="xkcdrand.php?min=1&max=2&int=on">go</a>.</li>
+                <li>Or, if you have a room with 23 puppies and are having a hard time deciding which is the cutest, assign each one a unique number, 1 through 23, set those in minimum and maximum (and also set "Integers Only") and hit go. Bam! That one is the cutest.</li> 
+                <li>The percentage of the people in the world who believe this is actually useful? Set minimum to 0, maximum to 10,0 and hit Go.</li>
+            </ul>
+            
+            <h4>Quick explanation of the math:</h4>
+            <p>Ok so how do we convert a random XKCD number to a number in your range?</p>
+            <p>First, let's set the xkcd range. That's the range from the first comic to the current comic. In our example, let's go with 1 to 920.<br>
+            920 - 1 = 919<br>
+            Let's say the random number we get back from xkcd is 430.<br>
+            430 is 46.74...% of the way from 0 to 919.<br>
+            Ok, so your range is -20 to 342.12?<br>
+            Well, the absolute value of your maximum minus your minimum is 362.12.<br>
+            46.74...% of the way from 0 to 362.12 is about 169.25.<br>
+            Now let's add you original minimum to account for our initial adjustment:<br>
+            169.25 + (-20) = 149.25<br>
+            So the random number in your range is 149.25.<br>
+            Or 149 if you said integers only. We round to the nearest whole number.
+            </p>
+            
+            <h2>This is clearly not an accurate XKCD random number generator</h2>
+            <p>You're right. MKop made a real one here: <a href="http://mkopinsky.aishdas.org/random.php">mkopinsky.aishdas.org/random.php</a></p>
+            
+            <h3>Notes:</h3>
+            <ul>
+                <li>source code: in a minute</li>
+                <li>the code ignores cookies. more on that later</li>
+                <li>currently, there is not much in the way of error handling delays from the xkcd server, so it might just timeout whilw you sit there waiting for the spinny thing to stop spinning.</li>
+                <li>known bug: issues with using 0 as an endpoint of your range</li>
+                
+            </ul>
+        </div>
+    </body>
+</html>
