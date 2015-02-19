@@ -207,7 +207,7 @@ $randomNumber = getRandomNumber();
             
             
             <?php if(!$errors): ?>
-                <div id="number"><?php $randomNumber; ?></div>
+                <div id="number"><?php echo $randomNumber; ?></div>
             <?php else: ?>
                 <div id="errors">
                     <ul>
