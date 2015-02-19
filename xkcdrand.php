@@ -4,13 +4,15 @@ $_min = null;
 $_max = null;
 $_int = null;
 
+$_histogramValues = array();
+
 
 function checkAndSetVars()
 {
     $messages = array();
-    $min = $_GET['min'];
-    $max = $_GET['max'];
-    $int = $_GET['int'];
+    $min = isset($_GET['min']) ? $_GET['min'] : null;
+    $max = isset($_GET['max']) ? $_GET['max'] : null;
+    $int = isset($_GET['int']) ? $_GET['int'] : null;
     if (!empty($min) && empty($max)) {
         $messages[] = "if you set a minimum, you also need a maximum";
     }
@@ -75,6 +77,9 @@ function getRandomNumber()
     if (!empty($_int) && $_int=="on") {
         $number = round(floatval($number));
     }
+
+    addHistogramCookieValue($number);
+
     return $number;
 }
 
@@ -109,6 +114,48 @@ function getNumFromXkcdUrl($url)
     $url = parse_url($url);
     $number = trim($url['path'], '/');
     return $number;
+}
+
+function getHistogramCookieValues()
+{
+    global $_histogramValues;
+
+    $key = getHistogramCookieKey();
+    if (isset($_COOKIE[$key])) {
+        $_histogramValues = json_decode($_COOKIE[$key]);
+    }
+    return $_histogramValues;
+}
+
+function addHistogramCookieValue($value)
+{
+    global $_histogramValues;
+
+    $key = getHistogramCookieKey();
+    $values = getHistogramCookieValues();
+    $values[] = $value;
+    $_histogramValues[] = $value;
+
+    setcookie($key, json_encode($values));
+    return $values;
+}
+
+function resetHistogramCookie()
+{
+    $key = getHistogramCookieKey();
+    setcookie($key, "", time() - 3600);
+}
+
+function getHistogramCookieKey()
+{
+    $keyBase = "histogram|";
+
+    global $_min, $_max, $_int;
+    $min = empty($_min) ? "0" : (string) $_min;
+    $max = empty($_max) ? "0" : (string) $_max;
+    $int = empty($_int) ? "0" : (string) $_int;
+
+    return $keyBase . $min . ":" . $max . ":" . $int;
 }
 
 ?>
@@ -168,6 +215,8 @@ function getNumFromXkcdUrl($url)
                     </ul>
                 </div>
             <?php endif; ?>
+
+            <?php print_r($_histogramValues); ?>
             
         </div>
     </body>
