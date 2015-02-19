@@ -158,6 +158,7 @@ function getHistogramCookieKey()
     return $keyBase . $min . ":" . $max . ":" . $int;
 }
 
+$randomNumber = getRandomNumber();
 ?>
 <html>
     <head>
@@ -206,7 +207,7 @@ function getHistogramCookieKey()
             
             
             <?php if(!$errors): ?>
-                <div id="number"><?php echo getRandomNumber(); ?></div>
+                <div id="number"><?php $randomNumber; ?></div>
             <?php else: ?>
                 <div id="errors">
                     <ul>
