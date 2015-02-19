@@ -180,6 +180,7 @@ function getHistogramCookieKey()
                 padding: 10px 10px 10px 10px;
             }
         </style>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     </head>
     <body>
         <div id="content">
@@ -216,8 +217,31 @@ function getHistogramCookieKey()
                 </div>
             <?php endif; ?>
 
-            <?php print_r($_histogramValues); ?>
             
+            <script type="text/javascript">
+              google.load("visualization", "1", {packages:["corechart"]});
+              google.setOnLoadCallback(drawChart);
+              function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                  ['Run', 'Value'],
+                  <?php 
+                      $i = 1; 
+                      foreach ($_histogramValues as $value): 
+                  ?>
+                    ['<?php echo $i++; ?>', <?php echo $value; ?>],
+                  <?php endforeach; ?>
+                  ]);
+
+                var options = {
+                  title: 'Random numbers',
+                  legend: { position: 'none' },
+                };
+
+                var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
+                chart.draw(data, options);
+              }
+            </script>
+            <div id="chart_div" style="width: 700px; height: 500px;"></div>
         </div>
     </body>
 </html>
