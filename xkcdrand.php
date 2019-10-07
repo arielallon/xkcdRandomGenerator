@@ -4,7 +4,7 @@ $_min = null;
 $_max = null;
 $_int = null;
 
-$_histogramValues = array();
+$_histogramValues = [];
 
 
 function checkAndSetVars()
